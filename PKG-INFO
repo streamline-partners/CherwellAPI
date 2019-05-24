@@ -1,0 +1,9 @@
+Metadata-Version: 1.0
+Name: CherwellAPI
+Version: 1.1
+Summary: A Python library wrapper, abstracting the Cherwell API
+Author: Streamline Partners PTY Ltd
+Author-email: david.graupner@streamlinepartners.com.au
+Description: An abstraction layer around the Cherwell REST API that makes it easier and more intuitive to use
+Platform: Any OS that supports and has Python 2.7 installed
+
