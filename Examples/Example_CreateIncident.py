@@ -10,10 +10,10 @@ import pickle
 # Change the following to suit your instance
 #############################################
 
-base_uri = "http://ec2-52-63-131-135.ap-southeast-2.compute.amazonaws.com"
-username = "CSDAdmin"
-password = "CSDAdmin"
-api_key = "b24526ea-a86a-4eae-b3de-ec2107c4cfe9"
+base_uri = "http://<Your Cherwell Host here>"
+username = "<Your UserName Here>"
+password = "<Your Password here>"
+api_key = "<Your Cherwell REST API Client Key here>"
 
 # Create a new cherwellclient connection - not passing in an existing cache object
 cherwell_client = CherwellClient.Connection(base_uri, api_key, username, password)
