@@ -1,1 +1,1 @@
-A Python 2.7 library wrapper, abstracting the Cherwell API
+A Python library wrapper, abstracting the Cherwell API
