@@ -10,8 +10,6 @@ import time
 # and reused if not expired.
 ###########################################################################################
 
-import time
-
 #############################################
 # Change the following to suit your instance
 #############################################
@@ -21,7 +19,7 @@ username = "<Your UserName Here>"
 password = "<Your Password here>"
 api_key = "<Your Cherwell REST API Client Key here>"
 
-# Create a new cherwellclient connection - not passing in an existing token object
+# Create a new CherwellClient connection
 cherwell_client = CherwellClient.Connection(base_uri, api_key, username, password)
 
 # Show the current token
@@ -41,13 +39,13 @@ print("Current Token is Expired: {}".format(cherwell_client.token.expired()))
 
 # Sleep until the token has expired - (Tip: set the token value in Cherwell to a couple of mins or less)
 while not cherwell_client.token.expired():
-    time.sleep(5)
     print("#", end="")
+    time.sleep(5)
 
 # Retrieve another BusinessObject ID with an expired token
 print("Change Request Business Object Id is: {}".format(cherwell_client.get_business_object_id("ChangeRequest")))
 
-# Check the token details again - the CherwellClient Connection should take care of getting a new token
+# Check the token details again - the CherwellClient Connection should take care of refreshing the token
 print("Current Token Expiry time in GMT is: {}".format(cherwell_client.token.token_expiry_gmt()))
 print("Current Local GMT Time is: {}".format(cherwell_client.token.current_time_gmt()))
 print("Current Token is Expired: {}".format(cherwell_client.token.expired()))
@@ -70,6 +68,3 @@ print("Problem Business Object Id is: {}".format(cherwell_client.get_business_ob
 print("\nCached Token Expiry time in GMT is: {}".format(new_cherwell_client.token.token_expiry_gmt()))
 print("Cached Local GMT Time is: {}".format(new_cherwell_client.token.current_time_gmt()))
 print("Cached Token is Expired: {}".format(new_cherwell_client.token.expired()))
-
-
-

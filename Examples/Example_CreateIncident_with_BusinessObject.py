@@ -1,3 +1,4 @@
+from __future__ import print_function
 from CherwellAPI import CherwellClient
 import pickle
 
@@ -15,19 +16,19 @@ username = "<Your UserName Here>"
 password = "<Your Password here>"
 api_key = "<Your Cherwell REST API Client Key here>"
 
-# Create a new cherwellclient connection - not passing in an existing cache object
+# Create a new CherwellClient connection
 cherwell_client = CherwellClient.Connection(base_uri, api_key, username, password)
 
-# Create a new instance of a Incident
+# Create a new instance of an Incident
 incident = cherwell_client.get_new_business_object("Incident")
 
 # show there is no Record saved currently
-print "########################"
-print "Before Saving new Record"
-print "########################"
-print "BusObId: {}".format(incident.busObId)
-print "RecId: {}".format(incident.busObRecId)
-print "PublicId: {}\n".format(incident.busObPublicId)
+print("########################")
+print("Before Saving new Record")
+print("########################")
+print("BusObId: {}".format(incident.busObId))
+print("RecId: {}".format(incident.busObRecId))
+print("PublicId: {}\n".format(incident.busObPublicId))
 
 # Set the properties of the new incident
 incident.CustomerDisplayName = "John Allard"
@@ -42,10 +43,10 @@ incident.Source = "Event"
 incident.Save()
 
 # show the record is now saved and has an id
-print "########################"
-print "After Saving new Record"
-print "########################"
-print "BusObId: {}".format(incident.busObId)
-print "RecId: {}".format(incident.busObRecId)
-print "PublicId: {}".format(incident.busObPublicId)
+print("########################")
+print("Before Saving new Record")
+print("########################")
+print("BusObId: {}".format(incident.busObId))
+print("RecId: {}".format(incident.busObRecId))
+print("PublicId: {}\n".format(incident.busObPublicId))
 

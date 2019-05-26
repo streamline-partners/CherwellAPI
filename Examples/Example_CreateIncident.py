@@ -1,8 +1,9 @@
+from __future__ import print_function
 from CherwellAPI import CherwellClient
 import pickle
 
 #########################################################################################
-# This example demonstrates how the Cherwell API Connection object can be used to
+# This example demonstrates how the CherwellAPI Connection object can be used to
 # create a new business object
 ###########################################################################################
 
@@ -15,7 +16,7 @@ username = "<Your UserName Here>"
 password = "<Your Password here>"
 api_key = "<Your Cherwell REST API Client Key here>"
 
-# Create a new cherwellclient connection - not passing in an existing cache object
+# Create a new CherwellClient connection
 cherwell_client = CherwellClient.Connection(base_uri, api_key, username, password)
 
 # Get a template for a incident object
@@ -36,9 +37,9 @@ cherwell_client.set_business_object_field_value_in_template(incident_template, "
 new_inc_public_id, new_inc_rec_id, business_object_id = cherwell_client.create_business_object(incident_template, "incident")
 
 # Show the new id
-print "New incident public id is: {}".format(new_inc_public_id)
-print "New incident record id is: {}".format(new_inc_rec_id)
-print "Business Object ID is: {}".format(business_object_id)
+print("New incident public id is: {}".format(new_inc_public_id))
+print("New incident record id is: {}".format(new_inc_rec_id))
+print("Business Object ID is: {}".format(business_object_id))
 
 
 

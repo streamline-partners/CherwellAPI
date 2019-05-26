@@ -1,9 +1,8 @@
 import requests
-from Token import AccessToken
-from BusinessObjects import BusinessObject
-from Cache import ObjectCache
-import Filter
-
+from CherwellAPI.Token import AccessToken
+from CherwellAPI.BusinessObjects import BusinessObject
+from CherwellAPI.Cache import ObjectCache
+from CherwellAPI import Filter
 
 # Python Class wrapper for CherwellAPI/ScienceLogic Integration
 class Connection:
