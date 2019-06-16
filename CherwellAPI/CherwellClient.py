@@ -3,6 +3,8 @@ from CherwellAPI.Token import AccessToken
 from CherwellAPI.BusinessObjects import BusinessObject
 from CherwellAPI.Cache import ObjectCache
 from CherwellAPI import Filter
+from functools import wraps, partial
+import time
 
 # Python Class wrapper for CherwellAPI/ScienceLogic Integration
 class Connection:
@@ -115,7 +117,6 @@ class Connection:
                 token_result.reason,
                 token_result.text))
 
-
     def _refresh_token(self):
 
         """
@@ -148,7 +149,7 @@ class Connection:
         if self.token is None or self.token.access_token is None:
             # Get a new token
             self._get_token()
-        elif self.token.expired or self.token.access_token is None:
+        elif self.token.expired() or self.token.access_token is None:
             # Refresh the token if its expired
             self._refresh_token()
 
@@ -210,7 +211,6 @@ class Connection:
                     result_business_object_id.text))
 
         return self.cache.get_business_object_id(business_object_name)
-
 
     def get_business_object_template(self, business_object_name, refresh=False):
 
@@ -474,7 +474,6 @@ class Connection:
                 result_new.reason,
                 result_new.text))
 
-    # gets a new business object
     def get_new_business_object(self, business_object_name, refresh=False):
 
         """
@@ -635,7 +634,6 @@ class Connection:
         # Return the business object
         return rows, business_objects
 
-    # Finds a business object using a single lookup value
     def get_business_records(self, filter_object):
 
         """

@@ -116,6 +116,7 @@ class AccessToken(object):
 
         current_time = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime())
         current_time = strptime(current_time, "%a, %d %b %Y %H:%M:%S %Z")
+
         return datetime.datetime(*current_time[:6])
 
     def token_expiry_gmt(self):
@@ -155,6 +156,7 @@ class AccessToken(object):
             self.token_type = token_json["token_type"]
             self.client_id = token_json["as:client_id"]
             self.refresh_token = token_json["refresh_token"]
+
         except:
             raise ValueError("Invalid Token Values")
 
