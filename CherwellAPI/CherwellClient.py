@@ -573,6 +573,9 @@ class Connection:
         # return value to indicate how many rows found
         rows = 0
 
+        # Start at page number 0
+        page_number = 1
+
         if isinstance(filter_object, Filter.SimpleFilter):
 
             # Get the object id for the requested object
@@ -592,44 +595,53 @@ class Connection:
             # Raise an exception
             raise ValueError("Filter object is not an instance of SimpleFilter")
 
-        # Setup the payload
-        payload = {"busObID": business_object_id, "filters": filter_info,
-                   "includeAllFields": filter_object.include_all_fields}
+        while True:
+            # Setup the payload
+            payload = {"busObID": business_object_id, "filters": filter_info,
+                       "includeAllFields": filter_object.include_all_fields, "pageNumber": page_number}
 
-        # Attempt to get the required business object
-        result_bus_obj_search = requests.post(self.cache.get_uri("BusinessSearchResults"), json=payload,
-                               headers=self._get_authorisation_header())
+            # Attempt to get the required business object
+            result_bus_obj_search = requests.post(self.cache.get_uri("BusinessSearchResults"), json=payload,
+                                   headers=self._get_authorisation_header())
 
-        if result_bus_obj_search.status_code == 200:
+            if result_bus_obj_search.status_code == 200:
 
-            search_results = result_bus_obj_search.json()
+                search_results = result_bus_obj_search.json()
 
-            # Get how many rows were returned
-            rows = search_results["totalRows"]
+                # Get how many rows were returned
+                rows = search_results["totalRows"]
 
-            # Loop through all the business object returned and get a new business object for each
-            for business_object in search_results["businessObjects"]:
+                # If we got no records back - means we have found them all - exit
+                if len(search_results["businessObjects"]) == 0:
+                    break
 
-                # Create a new business object passing in the name and object id, and the
-                # function used to get a new header
-                new_business_object = BusinessObject(filter_object.business_object_name, self._get_authorisation_header,
-                                                     self.cache.get_uri("BusinessObjectSave"),
-                                                     self.cache.get_uri("BusinessObjectDelete"), business_object_id,
-                                                     business_object["busObRecId"], business_object["busObPublicId"])
+                # Loop through all the business object returned and get a new business object for each
+                for business_object in search_results["businessObjects"]:
 
-                # Load the fields from the obtained template
-                new_business_object.load(business_object)
+                    # Create a new business object passing in the name and object id, and the
+                    # function used to get a new header
+                    new_business_object = BusinessObject(filter_object.business_object_name, self._get_authorisation_header,
+                                                         self.cache.get_uri("BusinessObjectSave"),
+                                                         self.cache.get_uri("BusinessObjectDelete"), business_object_id,
+                                                         business_object["busObRecId"], business_object["busObPublicId"])
 
-                # add the new object to the business objects collection
-                business_objects.append(new_business_object)
+                    # Load the fields from the obtained template
+                    new_business_object.load(business_object)
 
-        else:
-            # There was a problem with the API call, generate an exception
-            raise Exception("Error searching for business objects '{}'. HTTP:{} '{}' - {}".format(
-                filter_object.business_object_name,
-                result_bus_obj_search.status_code,
-                result_bus_obj_search.reason,
-                result_bus_obj_search.text))
+                    # add the new object to the business objects collection
+                    business_objects.append(new_business_object)
+
+            else:
+                # There was a problem with the API call, generate an exception
+                raise Exception("Error searching for business objects '{}'. HTTP:{} '{}' - {}".format(
+                    filter_object.business_object_name,
+                    result_bus_obj_search.status_code,
+                    result_bus_obj_search.reason,
+                    result_bus_obj_search.text))
+
+
+            # Increment the page number
+            page_number = page_number + 1
 
         # Return the business object
         return rows, business_objects
