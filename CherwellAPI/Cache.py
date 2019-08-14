@@ -50,7 +50,8 @@ class ObjectCache:
             "BusinessObjectSummary": "{0}/CherwellAPI/api/V1/getbusinessobjectsummary/busobname/".format(base_uri),
             "BusinessObjectSave": "{0}/CherwellAPI/api/V1/SaveBusinessObject".format(base_uri),
             "BusinessSearchResults": "{0}/CherwellAPI/api/V1/getsearchresults".format(base_uri),
-            "BusinessObjectDelete": "{0}/CherwellAPI/api/V1/deletebusinessobject/busobid/[busobid]/busobrecid/[busobrecid]".format(base_uri)
+            "BusinessObjectDelete": "{0}/CherwellAPI/api/V1/deletebusinessobject/busobid/[busobid]/busobrecid/[busobrecid]".format(base_uri),
+            "BusinessObjectSchema": "{0}/CherwellAPI/api/V1/getbusinessobjectschema/busobid/".format(base_uri),
             }
 
         # Setup the cache to hold business object id's
@@ -61,6 +62,9 @@ class ObjectCache:
 
         # Setup the cache to hold summaries
         self.cache["business_object_summaries"] = {}
+
+        # Setup the cache to hold schema's
+        self.cache["business_object_schemas"] = {}
 
     def contents(self):
 
@@ -191,6 +195,32 @@ class ObjectCache:
         """
 
         self.cache["business_object_summaries"][name] = value
+
+    def get_business_object_schema(self, business_object_id):
+
+        """ Returns a cached Business object schema"""
+
+        return self.cache["business_object_schemas"].get(business_object_id, None)
+
+    def set_business_object_schema(self, business_object_id, value):
+        """
+
+        Saves a new Business Object Schema into cache
+
+        Parameters:
+        ----------
+
+        business_object_id : str
+
+            The id of the business object
+
+        name : value
+
+            The business object schema to save into cache
+
+        """
+
+        self.cache["business_object_schemas"][business_object_id] = value
 
     def __repr__(self):
 

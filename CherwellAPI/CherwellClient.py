@@ -376,6 +376,60 @@ class Connection:
 
         return self.cache.get_business_object_summary(business_object_name)
 
+    def get_business_object_internalname(self, business_object_id, refresh=False):
+
+        """
+        This method uses the Cherwell API to retrieve a Cherwell business object schema, which it then uses
+        to get the business objects internal name.
+
+        The Business schema generally provides the following information about a Cherwell Business Object.
+
+            -- Details about every field on the business object
+            -- The internal name of the business object
+
+        If the schema is found in cache then it is returned from cache and a call to the
+        Cherwell REST API is avoided.
+
+        Parameters
+        ----------
+
+        business_object_id : str
+
+            The Cherwell business object id of an object for which the schema is being requested.
+
+        refresh : bool
+
+            A value of True indicates that an API call must be made to get the business object schema again, even
+            if the schema is already available in the cache.
+
+        Returns
+        -------
+
+            The Cherwell Business Object Internal name for the requested business object or 'None' if not found.
+
+        """
+
+        if not self.cache.get_business_object_schema(business_object_id) or refresh:
+
+            # Default the return to None
+            self.cache.set_business_object_schema(business_object_id, None)
+
+            # Call the API to get the schema
+            result_business_object_schema = requests.get("{}{}".format(
+                self.cache.get_uri("BusinessObjectSchema"), business_object_id),
+                headers=self._get_authorisation_header())
+
+            if result_business_object_schema.status_code == 200:
+
+                if result_business_object_schema.text != "[]":
+                    # Success - we have the schema
+                    self.cache.set_business_object_schema(business_object_id, result_business_object_schema.json())
+
+        if self.cache.get_business_object_schema(business_object_id):
+            return self.cache.get_business_object_schema(business_object_id)["name"]
+        else:
+            return self.cache.get_business_object_schema(business_object_id)
+
     def set_business_object_field_value_in_template(self, template, field_name, value):
 
         """
