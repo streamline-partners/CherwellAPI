@@ -1,4 +1,4 @@
-CherwellAPI is a suite of 2 Python modules that abstract the Cherwell REST API and simplify the process of connecting to, and interacting with Cherwell business objects. 
+CherwellAPI is a suite of Python modules that abstract the Cherwell REST API and simplify the process of connecting to, and interacting with Cherwell business objects. 
 
 Base Functionality Included
 ===========================
