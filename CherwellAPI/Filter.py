@@ -3,7 +3,7 @@
 #####################################################################################
 
 
-class Filter:
+class Filter(object):
 
     """
     The Filter class serves as object filter when searching for Cherwell business objects.
