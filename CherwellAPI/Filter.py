@@ -2,7 +2,7 @@
 # Class that is used to create a filter to search for objects
 #####################################################################################
 
-
+#Edited Class
 class Filter(object):
 
     """
