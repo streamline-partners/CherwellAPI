@@ -3,6 +3,7 @@ from CherwellAPI.Token import AccessToken
 from CherwellAPI.BusinessObjects import BusinessObject
 from CherwellAPI.Cache import ObjectCache
 from CherwellAPI import Filter
+from CherwellAPI import Passwords
 from functools import wraps, partial
 import time
 
@@ -55,9 +56,21 @@ class Connection:
 
         # Set the values we need that were passed in
         self.uri = base_uri
-        self.client_key = client_key
         self.username = username
-        self.password = password
+        try:
+            secret_key = open("secret.key", "rb").read()
+        except:
+            Passwords.generate_key()
+        try:
+            self.client_key = Passwords.decrypt_message("cherwell_api_key")
+        except:
+            client_key = Passwords.encrypt_message("cherwell_api_key",client_key)
+            self.client_key = Passwords.decrypt_message("cherwell_api_key")
+        try:
+            self.password = Passwords.decrypt_message("cherwell_password")
+        except:
+            password = Passwords.encrypt_message("cherwell_password",password)
+            self.password = Passwords.decrypt_message("cherwell_password")
 
         # Initialise a cache object - we can reuse
         if isinstance(cache, ObjectCache):
@@ -844,6 +857,177 @@ class Connection:
             # There was a problem with the API call, generate an exception
             raise Exception("Error searching for business objects '{}'. HTTP:{} '{}' - {}".format(
                 filter_object.business_object_name,
+                result_search.status_code,
+                result_search.reason,
+                result_search.text))
+
+        # Return the number of object and the array of objects
+        return rows, business_objects
+
+
+    def get_saved_search_results(self, association, scope, search_name, scope_owner="None", include_schema="false", results_as_simple_results_list="false"):
+
+        """
+        This method can be used to return the paged results of a saved search.
+
+        Parameters
+        ----------
+
+        association : str
+
+            The Business Object Display Name this search belongs to
+        
+        scope : str
+
+            The scope the search belongs to e.g. Global
+        
+        scope_owner : str
+
+            The scope owner the search belongs to defaulted to None
+        
+        search_name : str
+
+            The name of the saved search you want to run
+        
+        include_schema : str
+
+            Use to include the table schema of the saved search. If false, results contain the fieldid 
+            and field value without field information. Default is false. true or false
+        
+        results_as_simple_results_list : str
+
+            Indicates if the results should be returned in a simple results list format or a table format.
+            Default is a table format. true or false
+
+        Returns : List
+        -------
+
+            A list of paged results of a saved search.
+
+            Example:
+
+            {
+                "businessObjects": [
+                    {
+                        "busObId": "944ee68cc77c109557cf534f1d815ddca5282a0316",
+                        "busObPublicId": "SL1-Dev",
+                        "busObRecId": "94633cf94d6d924d17bc87477aae77d684a553b8f3",
+                        "fields": [
+                            {
+                            "dirty": false,
+                            "displayName": "Federation Name",
+                            "fieldId": "BO:944ee68cc77c109557cf534f1d815ddca5282a0316,FI:944ee692875572fd7d5ddf44ddb1a2b66f93fbed3e",
+                            "html": null,
+                            "name": "FederationName",
+                            "value": "SL1-Dev"
+                            },
+                            {
+                            "dirty": false,
+                            "displayName": "Federation Type",
+                            "fieldId": "BO:944ee68cc77c109557cf534f1d815ddca5282a0316,FI:944eef6fda969659714fed4498adabf5a712f72ada",
+                            "html": null,
+                            "name": "FederationType",
+                            "value": "ScienceLogic"
+                            },
+                            {
+                            "dirty": false,
+                            "displayName": "Status",
+                            "fieldId": "BO:944ee68cc77c109557cf534f1d815ddca5282a0316,FI:944ee695474b8573c238464f298f8aaeb380ff511e",
+                            "html": null,
+                            "name": "Status",
+                            "value": "Active"
+                            }
+                        ],
+                        "links": [
+                            {
+                            "name": "Delete Record",
+                            "url": "http://ec2-3-104-173-24.ap-southeast-2.compute.amazonaws.com/CherwellAPI/api/V1/deletebusinessobject/busobid/944ee68cc77c109557cf534f1d815ddca5282a0316/busobrecid/94633cf94d6d924d17bc87477aae77d684a553b8f3"
+                            }
+                        ],
+                        "errorCode": null,
+                        "errorMessage": null,
+                        "hasError": false
+                        }
+                    ],
+                    "hasPrompts": false,
+                    "links": [
+                        {
+                        "name": "First Page",
+                        "url": "http://ec2-3-104-173-24.ap-southeast-2.compute.amazonaws.com/CherwellAPI/api/V1/getsearchresults/association/944ee68cc77c109557cf534f1d815ddca5282a0316/scope/Global/scopeowner/None/searchname/All%20Active%20Federation%20Sources?pagesize=200&pagenumber=1"
+                        },
+                        {
+                        "name": "Last Page",
+                        "url": "http://ec2-3-104-173-24.ap-southeast-2.compute.amazonaws.com/CherwellAPI/api/V1/getsearchresults/association/944ee68cc77c109557cf534f1d815ddca5282a0316/scope/Global/scopeowner/None/searchname/All%20Active%20Federation%20Sources?pagesize=200&pagenumber=1"
+                        },
+                        {
+                        "name": "Next Page",
+                        "url": "http://ec2-3-104-173-24.ap-southeast-2.compute.amazonaws.com/CherwellAPI/api/V1/getsearchresults/association/944ee68cc77c109557cf534f1d815ddca5282a0316/scope/Global/scopeowner/None/searchname/All%20Active%20Federation%20Sources?pagesize=200&pagenumber=1"
+                        },
+                        {
+                        "name": "Previous Page",
+                        "url": "http://ec2-3-104-173-24.ap-southeast-2.compute.amazonaws.com/CherwellAPI/api/V1/getsearchresults/association/944ee68cc77c109557cf534f1d815ddca5282a0316/scope/Global/scopeowner/None/searchname/All%20Active%20Federation%20Sources?pagesize=200&pagenumber=1"
+                        }
+                    ],
+                    "prompts": [],
+                    "searchResultsFields": [],
+                    "simpleResults": null,
+                    "totalRows": 1,
+                    "errorCode": null,
+                    "errorMessage": null,
+                    "hasError": false
+                }
+
+        """
+
+        # Return value
+        business_objects = []
+
+        # setup the filter array
+        filter_info = []
+
+        # Setup the fields array
+        field_list = []
+
+        # return value to indicate how many rows found
+        rows = 0
+
+        # Get the object id for the requested object
+        business_object_id = self.get_business_object_id(association)
+
+        saved_search_uri = self.cache.get_uri("RunSavedSearch").replace("[association]", business_object_id).replace("[scope]", scope).replace("[scopeowner]", scope_owner).replace("[searchname]", search_name).replace("[includeschema]", include_schema).replace("[resultsAsSimpleResultsList]", results_as_simple_results_list)
+
+        # Attempt to get the required business object
+        result_search = requests.get(saved_search_uri, headers=self._get_authorisation_header())
+
+        if result_search.status_code == 200:
+
+            # We have some records
+            search_results = result_search.json()
+
+            # Get how many rows were returned
+            rows = search_results["totalRows"]
+
+            # Loop through all the business object returned
+            for business_object in search_results["businessObjects"]:
+
+                field_result_list = []
+
+                # Loop through each field returned
+                for field in business_object["fields"]:
+
+                    # Add to the field result list
+                    field_dict = {"name": field["name"], "value": field["value"],"displayName": field["displayName"], "fieldId": field["fieldId"]}
+                    field_result_list.append(field_dict)
+
+                # Add the fields and business object id into a dictionary
+                business_object_dict = {"busObRecId": business_object["busObRecId"], "fields": field_result_list}
+
+                # Add the this dictionary to the array to be returned
+                business_objects.append(business_object_dict)
+        else:
+            # There was a problem with the API call, generate an exception
+            raise Exception("Error searching for business objects '{}'. HTTP:{} '{}' - {}".format(
+                association,
                 result_search.status_code,
                 result_search.reason,
                 result_search.text))

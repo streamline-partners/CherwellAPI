@@ -50,6 +50,7 @@ class ObjectCache:
             "BusinessObjectSummary": "{0}/CherwellAPI/api/V1/getbusinessobjectsummary/busobname/".format(base_uri),
             "BusinessObjectSave": "{0}/CherwellAPI/api/V1/SaveBusinessObject".format(base_uri),
             "BusinessSearchResults": "{0}/CherwellAPI/api/V1/getsearchresults".format(base_uri),
+            "RunSavedSearch": "{0}/CherwellAPI/api/V1/getsearchresults/association/[association]/scope/[scope]/scopeowner/[scopeowner]/searchname/[searchname]?includeschema=[includeschema]&resultsAsSimpleResultsList=[resultsAsSimpleResultsList]".format(base_uri),
             "BusinessObjectDelete": "{0}/CherwellAPI/api/V1/deletebusinessobject/busobid/[busobid]/busobrecid/[busobrecid]".format(base_uri),
             "BusinessObjectSchema": "{0}/CherwellAPI/api/V1/getbusinessobjectschema/busobid/".format(base_uri),
             }
