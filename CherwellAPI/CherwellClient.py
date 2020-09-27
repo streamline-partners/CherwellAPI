@@ -3,7 +3,7 @@ from CherwellAPI.Token import AccessToken
 from CherwellAPI.BusinessObjects import BusinessObject
 from CherwellAPI.Cache import ObjectCache
 from CherwellAPI import Filter
-from CherwellAPI import Passwords
+from CherwellAPI import CherwellCredentials
 from functools import wraps, partial
 import time
 
@@ -57,20 +57,14 @@ class Connection:
         # Set the values we need that were passed in
         self.uri = base_uri
         self.username = username
-        try:
-            secret_key = open("secret.key", "rb").read()
-        except:
-            Passwords.generate_key()
-        try:
-            self.client_key = Passwords.decrypt_message("cherwell_api_key")
-        except:
-            client_key = Passwords.encrypt_message("cherwell_api_key",client_key)
-            self.client_key = Passwords.decrypt_message("cherwell_api_key")
-        try:
-            self.password = Passwords.decrypt_message("cherwell_password")
-        except:
-            password = Passwords.encrypt_message("cherwell_password",password)
-            self.password = Passwords.decrypt_message("cherwell_password")
+        if password == "" or client_key == "":
+            self.client_key = CherwellCredentials.decrypt_message("cherwell_api_key")
+            self.password = CherwellCredentials.decrypt_message("cherwell_password")
+        elif password != "" or client_key != "":
+            self.client_key = client_key
+            self.password = password
+        else:
+            raise Exception("Unable to locate encrypted Cherwell API Key and Password. Please run the function CherwellCrentials.create_encrypted_cherwell_credentials(password, client_key) first or pass in the password and client key in the CherwellClient.Connection Method")
 
         # Initialise a cache object - we can reuse
         if isinstance(cache, ObjectCache):
