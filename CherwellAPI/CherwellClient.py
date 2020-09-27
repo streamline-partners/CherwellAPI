@@ -58,13 +58,14 @@ class Connection:
         self.uri = base_uri
         self.username = username
         if password == "" or client_key == "":
-            self.client_key = CherwellCredentials.decrypt_message("cherwell_api_key")
-            self.password = CherwellCredentials.decrypt_message("cherwell_password")
-        elif password != "" or client_key != "":
+            try:
+                self.client_key = CherwellCredentials.decrypt_message("cherwell_api_key")
+                self.password = CherwellCredentials.decrypt_message("cherwell_password")
+            except:
+                raise Exception("Unable to locate encrypted Cherwell API Key and Password. Please run the function CherwellCrentials.create_encrypted_cherwell_credentials(password, client_key) first or pass in the password and client key in the CherwellClient.Connection Method")
+        else password != "" or client_key != "":
             self.client_key = client_key
             self.password = password
-        else:
-            raise Exception("Unable to locate encrypted Cherwell API Key and Password. Please run the function CherwellCrentials.create_encrypted_cherwell_credentials(password, client_key) first or pass in the password and client key in the CherwellClient.Connection Method")
 
         # Initialise a cache object - we can reuse
         if isinstance(cache, ObjectCache):
