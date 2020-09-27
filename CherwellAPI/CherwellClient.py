@@ -63,7 +63,7 @@ class Connection:
                 self.password = CherwellCredentials.decrypt_message("cherwell_password")
             except:
                 raise Exception("Unable to locate encrypted Cherwell API Key and Password. Please run the function CherwellCrentials.create_encrypted_cherwell_credentials(password, client_key) first or pass in the password and client key in the CherwellClient.Connection Method")
-        else password != "" or client_key != "":
+        else:
             self.client_key = client_key
             self.password = password
 
