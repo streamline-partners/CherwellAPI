@@ -18,8 +18,11 @@ username = "SL1"
 password = "Password123"
 api_key = "2940baca-1e3a-4f5e-863a-a4e2370a8633"
 
+#Create Encrypted Credentials (Only Have to Run Once)
+CherwellCredentials.create_encrypted_cherwell_credentials(password,api_key)
+
 # Create a new Cherwellclient connection
-cherwell_client = CherwellClient.Connection(base_uri, api_key, username, password)
+cherwell_client = CherwellClient.Connection(base_uri, None, username, None)
 
 # Pass the association, scope, saved search name to the CherwellClient's get_saved_search_results
 num_records, business_objects = cherwell_client.get_saved_search_results("FederationRegistration","Global","All Active Federation Sources")

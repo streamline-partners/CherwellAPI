@@ -4,13 +4,44 @@ Base Functionality Included
 ===========================
 
 1. AdHoc searching
-2. Creating new business objects
-3. Updating existing business objects
-4. Deleting existing business objects
+2. Encrypting the password and client_key
+3. Instantiating a connection object with Encryption
+4. Instantiating a connection object without Encryption
+3. Creating new business objects
+4. Updating existing business objects
+5. Deleting existing business objects
+6. Running a Saved Search
 
 The modules also cater for caching of commonly used items such as templates, summaries and business object id's as well as self-managing the expiry and refreshing of the Bearer token used for authorisation. Additionally Tokens can be cached and reused.
 
-Instantiating a connection object
+Encrypting the password and client_key
+======================================
+
+All interaction typically takes place the CherwellCredentials Library which can be instantiated as follows:
+
+```python
+from CherwellAPI import CherwellCredentials
+
+CherwellCredentials.create_encrypted_cherwell_credentials(<password>,<api_key>)  
+```
+*Replace the parameters between '<>' with appropriate values from your own Cherwell instance.*
+
+Instantiating a connection object with Encryption
+=================================
+
+All interaction typically takes place through a **_Connection_** object which can be instantiated as follows:
+
+```python
+from CherwellAPI import CherwellClient
+  
+cherwell_client = CherwellClient.Connection(<base_uri>,None,<username>,None)  
+```
+*Replace the parameters between '<>' with appropriate values from your own Cherwell instance.*
+
+This will search for the stored encryption files you created when running the 
+
+Instantiating a connection object without Encryption create_encrypted_cherwell_credentials method and pass
+those values in as the api_key and password
 =================================
 
 All interaction typically takes place through a **_Connection_** object which can be instantiated as follows:
@@ -135,6 +166,31 @@ if num_records == 1:
 
     # We should only have 1
     business_objects[0].Delete()
+
+```
+
+Running a Saved Search
+==========================
+
+The following code snippet, show an example of how to run a saved search on the Cherwell Platform.
+
+```python
+
+from CherwellAPI import CherwellClient
+
+# Create a new CherwellClient Connection
+cherwell_client = CherwellClient.Connection(<base_uri>,<api_key>,<username>,<password>)
+
+# Pass the association, scope, saved search name to the CherwellClient's get_saved_search_results
+# This method returns the results of the saved search
+num_records, business_objects = cherwell_client.get_saved_search_results("FederationRegistration","Global","All Active Federation Sources")
+
+# Print number of records returned
+print("Number of records: {}".format(num_records))
+
+# Loop through the records returned
+for business_object in business_objects:
+    print(business_object)
 
 ```
 
