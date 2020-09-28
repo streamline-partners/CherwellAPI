@@ -49,8 +49,8 @@ Incident.Source = "Event"
 Incident.Save()
 
 # Show the new business object record id
-print "RecId for new Incident: {}".format(Incident.busObRecId)
-print "PublicId for new Incident: {}".format(Incident.busObPublicId)
+print("RecId for new Incident: {}".format(Incident.busObRecId))
+print("PublicId for new Incident: {}".format(Incident.busObPublicId))
 
 ```
 Output from executing the script above would likely looks as follows:
@@ -90,15 +90,15 @@ search_filter.add_search_fields("Description", "contains", "test")
 num_records, business_objects = cherwell_client.get_business_objects(search_filter)
 
 # Print number of records returned
-print "Number of records: {}".format(num_records)
+print("Number of records: {}".format(num_records))
 
 # Loop through the records returned
 index = 0
 for business_object in business_objects:
     index = index + 1
-    print "Record: {}".format(index)
-    print "Public Record Id: {}".format(business_object.busObPublicId)
-    print "Status: {}".format(business_object.Status)
+    print("Record: {}".format(index))
+    print("Public Record Id: {}".format(business_object.busObPublicId))
+    print("Status: {}".format(business_object.Status))
 
     # Change the Incident description
     business_object.Description = "Updated the description"

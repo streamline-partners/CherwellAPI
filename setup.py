@@ -9,9 +9,9 @@ with open(path.join(this_directory, "README.md"), "r") as readme_file:
 
 setuptools.setup(
     name='CherwellAPI',
-    version='1.3.1',
+    version='1.3.4',
     author='Streamline Partners PTY Ltd',
-    author_email='david.graupner@streamlinepartners.com.au',
+    author_email='david.graupner@streamlinepartners.com.au, aaron.cohee@streamlinepartners.com.au',
     description='A Python library wrapper, abstracting the Cherwell REST API',
     url='',
     packages=setuptools.find_packages(),
