@@ -7,16 +7,17 @@ Base Functionality Included
 2. Encrypting the password and client_key
 3. Instantiating a connection object with Encryption
 4. Instantiating a connection object without Encryption
-3. Creating new business objects
-4. Updating existing business objects
-5. Deleting existing business objects
-6. Running a Saved Search
+5. Creating new business objects
+6. Updating existing business objects
+7. Deleting existing business objects
+8. Running a Saved Search
 
 The modules also cater for caching of commonly used items such as templates, summaries and business object id's as well as self-managing the expiry and refreshing of the Bearer token used for authorisation. Additionally Tokens can be cached and reused.
 
 Encrypting the password and client_key
 ======================================
 
+Only needs to be executed once, or when credentials change
 All interaction typically takes place the CherwellCredentials Library which can be instantiated as follows:
 
 ```python
@@ -29,6 +30,7 @@ CherwellCredentials.create_encrypted_cherwell_credentials(<password>,<api_key>)
 Instantiating a connection object with Encryption
 =================================
 
+Step 2 "Encrypting the password and client_key" must be completed once before this step is executed
 All interaction typically takes place through a **_Connection_** object which can be instantiated as follows:
 
 ```python
