@@ -1,8 +1,5 @@
 from __future__ import print_function
 import os,sys,inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
 from CherwellAPI import CherwellClient
 from CherwellAPI import CherwellCredentials
 import pickle
@@ -23,7 +20,7 @@ password = "Password123"
 api_key = "2940baca-1e3a-4f5e-863a-a4e2370a8633"
 
 #Create Encrypted Credentials
-# CherwellCredentials.create_encrypted_cherwell_credentials(password,api_key)
+CherwellCredentials.create_encrypted_cherwell_credentials(password,api_key)
 
 # Create a new Cherwellclient connection
 cherwell_client = CherwellClient.Connection(base_uri=base_uri, username=username)
