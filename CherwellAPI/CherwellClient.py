@@ -57,7 +57,7 @@ class Connection:
         # Set the values we need that were passed in
         self.uri = base_uri
         self.username = username
-        if password == "" or client_key == "":
+        if not password or not client_key:
             try:
                 self.client_key = CherwellCredentials.decrypt_message("cherwell_api_key")
                 self.password = CherwellCredentials.decrypt_message("cherwell_password")
