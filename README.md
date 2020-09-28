@@ -17,7 +17,8 @@ The modules also cater for caching of commonly used items such as templates, sum
 Encrypting the password and client_key
 ======================================
 
-Only needs to be executed once, or when credentials change
+Only needs to be executed once, or when credentials change.
+
 All interaction typically takes place the CherwellCredentials Library which can be instantiated as follows:
 
 ```python
@@ -30,7 +31,8 @@ CherwellCredentials.create_encrypted_cherwell_credentials(<password>,<api_key>)
 Instantiating a connection object with Encryption
 =================================
 
-Step 2 "Encrypting the password and client_key" must be completed once before this step is executed
+Step 2 "Encrypting the password and client_key" must be completed once before this step is executed.
+
 All interaction typically takes place through a **_Connection_** object which can be instantiated as follows:
 
 ```python
@@ -42,8 +44,7 @@ cherwell_client = CherwellClient.Connection(<base_uri>,None,<username>,None)
 
 This will search for the stored encryption files you created when running the 
 
-Instantiating a connection object without Encryption create_encrypted_cherwell_credentials method and pass
-those values in as the api_key and password
+Instantiating a connection object without Encryption
 =================================
 
 All interaction typically takes place through a **_Connection_** object which can be instantiated as follows:
