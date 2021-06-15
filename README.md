@@ -11,6 +11,7 @@ Base Functionality Included
 6. Updating existing business objects
 7. Deleting existing business objects
 8. Running a Saved Search
+9. Logging out of Cherwell
 
 The modules also cater for caching of commonly used items such as templates, summaries and business object id's as well as self-managing the expiry and refreshing of the Bearer token used for authorisation. Additionally Tokens can be cached and reused.
 
