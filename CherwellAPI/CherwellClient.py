@@ -1029,3 +1029,23 @@ class Connection:
 
         # Return the number of object and the array of objects
         return rows, business_objects
+
+    def logout(self):
+
+        """
+        This method can be used to logout of the Cherwell instance. The user referenced in the authentication token is
+        instantly logged out. A new CherwellClient instance and token will be required to login again.
+        """
+
+        # Attempt to logout
+        response = requests.delete(self.cache.get_uri("Logout"), headers=self._get_authorisation_header())
+
+        if response.status_code == 200:
+            # Success - Logged out successfully
+            return str(response.status_code)
+        else:
+            # There was a problem with the API call, generate an exception
+            raise Exception("Error logging out of Cherwell 'HTTP:{} '{}' - {}".format(
+                response.status_code,
+                response.reason,
+                response.text))

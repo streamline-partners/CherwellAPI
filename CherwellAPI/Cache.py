@@ -53,6 +53,7 @@ class ObjectCache:
             "RunSavedSearch": "{0}/CherwellAPI/api/V1/getsearchresults/association/[association]/scope/[scope]/scopeowner/[scopeowner]/searchname/[searchname]?includeschema=[includeschema]&resultsAsSimpleResultsList=[resultsAsSimpleResultsList]".format(base_uri),
             "BusinessObjectDelete": "{0}/CherwellAPI/api/V1/deletebusinessobject/busobid/[busobid]/busobrecid/[busobrecid]".format(base_uri),
             "BusinessObjectSchema": "{0}/CherwellAPI/api/V1/getbusinessobjectschema/busobid/".format(base_uri),
+            "Logout": "{0}/CherwellAPI/api/V1/logout".format(base_uri),
             }
 
         # Setup the cache to hold business object id's

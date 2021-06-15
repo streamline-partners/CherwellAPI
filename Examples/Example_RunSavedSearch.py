@@ -13,10 +13,10 @@ from CherwellAPI import Filter
 # Change the following to suit your instance
 #############################################
 
-base_uri = "http://ec2-3-104-173-24.ap-southeast-2.compute.amazonaws.com"
-username = "SL1"
-password = "Password123"
-api_key = "2940baca-1e3a-4f5e-863a-a4e2370a8633"
+base_uri = "http://<Your Cherwell Host here>"
+username = "<Your UserName Here>"
+password = "<Your Password here>"
+api_key = "<Your Cherwell REST API Client Key here>"
 
 # Create a new Cherwellclient connection
 cherwell_client = CherwellClient.Connection(base_uri, api_key, username, password)
