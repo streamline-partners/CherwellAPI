@@ -48,10 +48,14 @@ class BusinessObject:
         busObPublicId : str
 
             The Cherwell business object public id
+        
+        https_verify : bool
+
+            Flag set to verify SSL Certificates during requests API Calls
 
         """
 
-    def __init__(self, type_name, get_header_function, save_uri, delete_uri, busObID, busObRecId="", busObPublicId=""):
+    def __init__(self, type_name, get_header_function, save_uri, delete_uri, busObID, busObRecId="", busObPublicId="", https_verify=False):
 
         self.type_name = type_name
         self.busObId = busObID
@@ -62,6 +66,7 @@ class BusinessObject:
         self.save_uri = save_uri
         self.delete_uri = delete_uri
         self.busObRecId = busObRecId
+        self.https_verify = https_verify
         self.has_Error = False
         self.error_Message = ""
 
@@ -162,7 +167,7 @@ class BusinessObject:
                         "busObRecId": self.busObRecId, "fields": self.busobj_fields}
 
         # Attempt to save the record
-        result_save = requests.post(self.save_uri, json=save_payload, headers=self.get_header())
+        result_save = requests.post(self.save_uri, json=save_payload, headers=self.get_header(),verify=self.https_verify)
 
         # Set the business object error states
         self.has_Error = result_save.json()["hasError"]
@@ -192,7 +197,7 @@ class BusinessObject:
             self.delete_uri = str(self.delete_uri).replace("[busobid]", self.busObId).replace("[busobrecid]", self.busObRecId)
 
             # Execute the delete
-            result_delete = requests.delete(self.delete_uri, headers=self.get_header())
+            result_delete = requests.delete(self.delete_uri, headers=self.get_header(),verify=self.https_verify)
 
             if result_delete.status_code == 200:
 

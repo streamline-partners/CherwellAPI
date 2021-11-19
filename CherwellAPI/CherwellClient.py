@@ -48,9 +48,13 @@ class Connection:
         provided then this is defaulted to 'None' and a new AccessToken will be created during the first
         interaction to the Cherwell REST API
 
+    https_verify : bool
+
+        Flag set to verify SSL Certificates during requests API Calls
+
     """
 
-    def __init__(self, base_uri="", client_key="", username="", password="", cache=None, token=None):
+    def __init__(self, base_uri="", client_key="", username="", password="", cache=None, token=None, https_verify=False):
 
         """ Connection instance initialisation """
 
@@ -84,6 +88,8 @@ class Connection:
             # Token not correct type - start with no token
             self.token = None
 
+        self.https_verify = https_verify
+
     def cache(self):
 
         """
@@ -112,7 +118,7 @@ class Connection:
                               "username": self.username, "password": self.password}
 
         # Attempt to get a token
-        token_result = requests.post(self.cache.get_uri("Token"), data=token_payload)
+        token_result = requests.post(self.cache.get_uri("Token"), data=token_payload,verify=self.https_verify)
 
         if token_result.status_code == 200:
             # We were successful  - create a new token using the newly obtained json token
@@ -135,7 +141,7 @@ class Connection:
                          "username": self.username, "password": self.password, "refresh_token": self.token.refresh_token}
 
         # Attempt to get a token
-        token_refresh_result = requests.post(self.cache.get_uri("Token"), data=token_refresh_payload)
+        token_refresh_result = requests.post(self.cache.get_uri("Token"), data=token_refresh_payload,verify=self.https_verify)
 
         # Get the token details
         if token_refresh_result.status_code == 200:
@@ -202,7 +208,7 @@ class Connection:
             self.cache.set_business_object_id(business_object_name, None)
 
             # Call the API to get the result
-            result_business_object_id = requests.get(self.cache.get_uri("BusinessObjectID") + business_object_name, headers=self._get_authorisation_header())
+            result_business_object_id = requests.get(self.cache.get_uri("BusinessObjectID") + business_object_name, headers=self._get_authorisation_header(),verify=self.https_verify)
 
             if result_business_object_id.status_code == 200:
 
@@ -261,7 +267,7 @@ class Connection:
             template_request = {"busObID": object_id, "includeRequired": "True", "includeAll": "True"}
 
             # Call the API to get the template
-            result_business_object_template = requests.post(self.cache.get_uri("BusinessObjectTemplate"), json=template_request, headers=self._get_authorisation_header())
+            result_business_object_template = requests.post(self.cache.get_uri("BusinessObjectTemplate"), json=template_request, headers=self._get_authorisation_header(),verify=self.https_verify)
 
             if result_business_object_template.status_code == 200:
 
@@ -374,7 +380,7 @@ class Connection:
             # Call the API to get the summary
             result_business_object_summary = requests.get("{}{}".format(
                 self.cache.get_uri("BusinessObjectSummary"), business_object_name),
-                headers=self._get_authorisation_header())
+                headers=self._get_authorisation_header(),verify=self.https_verify)
 
             if result_business_object_summary.status_code == 200:
 
@@ -425,7 +431,7 @@ class Connection:
             # Call the API to get the schema
             result_business_object_schema = requests.get("{}{}".format(
                 self.cache.get_uri("BusinessObjectSchema"), business_object_id),
-                headers=self._get_authorisation_header())
+                headers=self._get_authorisation_header(),verify=self.https_verify)
 
             if result_business_object_schema.status_code == 200:
 
@@ -523,7 +529,7 @@ class Connection:
         payload = {"busObID": business_object_id, "fields": template["fields"]}
 
         # Attempt to save the new Business Object
-        result_new = requests.post(self.cache.get_uri("BusinessObjectSave"), json=payload, headers=self._get_authorisation_header())
+        result_new = requests.post(self.cache.get_uri("BusinessObjectSave"), json=payload, headers=self._get_authorisation_header(),verify=self.https_verify)
 
         if result_new.status_code == 200:
             # Success - return the public id and record id
@@ -664,7 +670,7 @@ class Connection:
 
             # Attempt to get the required business object
             result_bus_obj_search = requests.post(self.cache.get_uri("BusinessSearchResults"), json=payload,
-                                   headers=self._get_authorisation_header())
+                                   headers=self._get_authorisation_header(),verify=self.https_verify)
 
             if result_bus_obj_search.status_code == 200:
 
@@ -821,7 +827,7 @@ class Connection:
 
         # Attempt to get the required business object
         result_search = requests.post(self.cache.get_uri("BusinessSearchResults"), json=payload,
-                               headers=self._get_authorisation_header())
+                               headers=self._get_authorisation_header(),verify=self.https_verify)
 
         if result_search.status_code == 200:
 
@@ -992,7 +998,7 @@ class Connection:
         saved_search_uri = self.cache.get_uri("RunSavedSearch").replace("[association]", business_object_id).replace("[scope]", scope).replace("[scopeowner]", scope_owner).replace("[searchname]", search_name).replace("[includeschema]", include_schema).replace("[resultsAsSimpleResultsList]", results_as_simple_results_list)
 
         # Attempt to get the required business object
-        result_search = requests.get(saved_search_uri, headers=self._get_authorisation_header())
+        result_search = requests.get(saved_search_uri, headers=self._get_authorisation_header(),verify=self.https_verify)
 
         if result_search.status_code == 200:
 
@@ -1038,7 +1044,7 @@ class Connection:
         """
 
         # Attempt to logout
-        response = requests.delete(self.cache.get_uri("Logout"), headers=self._get_authorisation_header())
+        response = requests.delete(self.cache.get_uri("Logout"), headers=self._get_authorisation_header(),verify=self.https_verify)
 
         if response.status_code == 200:
             # Success - Logged out successfully
